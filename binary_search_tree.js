@@ -23,10 +23,8 @@ class Node {
     }
 }
 
-
-// assumes integer data
 class BST {
-    constructor(data) {
+    constructor(data) { // assumes integer data
         this.root = !!data ? new Node(data) : null; // guard against undefined initialization (e.g. let a = new BST())
         this.count = !!data ? 1 : 0; // if initializing with data, set to 1
     }
@@ -147,13 +145,13 @@ class BST {
     }
 
     // pre-order
-    // sort by root, left, right -- same order as what we're iterating on(?)
+    // sort by root, left, right -- same order as input array(?)
     dfsPreOrder() {
 
     }
 
     //post-order
-    // left, right, root -- 
+    // left, right, root
     dfsPostOrder() {
 
     }
@@ -163,8 +161,9 @@ class BST {
     bfs() {
 
     }
-}
+};
 
+// --- helper: tree generation from array of numbers ---
 const createBST = (arr) => {
     const tree = new BST();
 
@@ -173,9 +172,16 @@ const createBST = (arr) => {
     })
 
     return tree;
-}
+};
+
+// --- runtime test cases, uncomment & edit as needed ---
 
 // const a = 2, b = 1, c = 5;
+/*
+      2
+     / \
+    1   5
+*/
 // let sampTree = new BST(a)
 // console.log(sampTree)
 // sampTree.insert(b)
@@ -188,7 +194,7 @@ const createBST = (arr) => {
 // console.log(treeA)
 // console.log(treeA.min())
 
-const arrWithoutDupes = [50, 17, 72, 12, 23, 54, 76, 9, 14, 19, 67]
+const arrWithoutDupes = [50, 17, 72, 12, 23, 54, 76, 9, 14, 19, 67];
 /*
             50
           /     \
@@ -221,3 +227,4 @@ expected:
 */
 const treeC = createBST(arr3);
 console.log(treeC);
+// console.log(treeC.dfsInOrder())
