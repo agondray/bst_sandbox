@@ -2,7 +2,9 @@
 const util = require('util')
 util.inspect.defaultOptions.depth = null
 
-// --- debug helpers ---
+// =================
+// Helpers - debug
+// =================-
 
 const TWO_SECONDS_MS = 2000;
 
@@ -112,10 +114,6 @@ class BST {
         let current = this.root;
 
         while(current.data !== data) {
-            if (!isWithinTimeLimit(Date.now())) {
-                break;
-            }
-
             if (data < current.data) {
                 current = current.left;
             } else if (data > current.data) {
@@ -225,7 +223,11 @@ class BST {
     }
 };
 
-// --- helper: tree generation from array of numbers ---
+// ===================================
+// Helpers - runtime tests & examples
+// ===================================
+
+// generate tree from array of numbers
 const createBST = (arr) => {
     const tree = new BST();
 
@@ -235,6 +237,11 @@ const createBST = (arr) => {
 
     return tree;
 };
+
+// WIP - other ideas for practice:
+// left sum, right sum
+// find & count shortest path to node
+// !!! GUI of a "mouse" solving a maze using BST traversals, with toggles & controls !!!
 
 // =================
 // Runtime Tests
