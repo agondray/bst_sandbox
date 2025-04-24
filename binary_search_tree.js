@@ -4,7 +4,7 @@ util.inspect.defaultOptions.depth = null
 
 // =================
 // Helpers - debug
-// =================-
+// =================
 
 const TWO_SECONDS_MS = 2000;
 
@@ -17,7 +17,9 @@ const isWithinTimeLimit = (startTime, limit = TWO_SECONDS_MS) => {
     return true
 }
 
-// --- Node & Tree class definitions ---
+// =============================
+// Node & Tree Class Definitions
+// =============================
 
 class Node {
     constructor(data, left = null, right = null) {
@@ -48,6 +50,7 @@ class BST {
             this.root = new Node(data)
             return;
         } else {
+            // #cleanup - convert to private method
             const searchTree = (n) => {
                 if (data < n.data) {
                     if (!n.left) {
@@ -217,9 +220,34 @@ class BST {
     }
 
     // --- breadth-first search ---
-    // use queue, return values by level
-    bfs() {
 
+    // use queue, return values by level
+    bfsShowLevels() {
+        let queue = [this.root];
+        let result = [];
+
+        this.#bfsTraverseRec(this.root, queue, result);
+
+        return result;
+    }
+
+    #bfsTraverseRec(node, queue, result) {
+        if(!node) return;
+
+        const current = queue.shift();
+
+        if (current.left) {
+            queue.push(current.left)
+        }
+
+        if (current.right) {
+            queue.push(current.right)
+        }
+
+        result.push(current.data);
+
+        this.#bfsTraverseRec(current.left, queue, result);
+        this.#bfsTraverseRec(current.right, queue, result);
     }
 };
 
@@ -298,10 +326,12 @@ expected:
     dfsInOrderTraversedPath AND dfsPreOrderSort -> [15, 3, 2, 12, 36, 28, 39]
     dfsInOrderSort -> [2, 3, 12, 15, 28, 36, 39]
     dfsPostOrderSort -> [2, 12, 3, 28, 39, 36, 15]
+    bfsShowLevels -> [5, 3, 36, 2, 12, 28, 39]
 */
 const treeC = createBST(arr3);
 console.log(treeC);
-console.log(treeC.dfsInOrderTraversedPath());
-console.log(treeC.dfsInOrderSort());
-console.log(treeC.dfsPreOrderSort());
-console.log(treeC.dfsPostOrderSort());
+// console.log(treeC.dfsInOrderTraversedPath());
+// console.log(treeC.dfsInOrderSort());
+// console.log(treeC.dfsPreOrderSort());
+// console.log(treeC.dfsPostOrderSort());
+console.log('BFS: ', treeC.bfsShowLevels());
