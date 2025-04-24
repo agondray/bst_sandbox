@@ -1,4 +1,4 @@
-// disable recursion limit for console.logs to see beautified object visualization in output
+// disable recursion limit for console.logs to see object structure in output
 const util = require('util')
 util.inspect.defaultOptions.depth = null
 
@@ -40,43 +40,21 @@ class BST {
     }
 
     size() {
-        return this.count;
+        return this.length;
     }
 
     insert(data) {
-        this.count++;
+        this.length++;
 
         if (!this.root) {
             this.root = new Node(data)
             return;
         } else {
-            // #cleanup - convert to private method
-            const searchTree = (n) => {
-                if (data < n.data) {
-                    if (!n.left) {
-                        n.left = new Node(data);
-                        return;
-                    } else {
-                        return searchTree(n.left);
-                    }
-                } else if (data >= n.data) { // this won't make a true BST due to >= comparison. it's arbitrarily here for cases like arrWithDupes
-                    if (!n.right) {
-                        n.right = new Node(data);
-                        return
-                    } else {
-                        return searchTree(n.right);
-                    }
-                } else {
-                    return;
-                }
-            }
-
-        return searchTree(this.root)
+            this.#searchTreeRec(this.root, data)
         }
     }
 
     // min & max will only work if the tree has no duplicate values
-
     min() {
         let current = this.root;
 
@@ -231,6 +209,9 @@ class BST {
         return result;
     }
 
+    // #private methods
+
+    // FIFO
     #bfsTraverseRec(node, queue, result) {
         if(!node) return;
 
@@ -248,6 +229,26 @@ class BST {
 
         this.#bfsTraverseRec(current.left, queue, result);
         this.#bfsTraverseRec(current.right, queue, result);
+    }
+
+    #searchTreeRec(n, data) {
+        if (data < n.data) {
+            if (!n.left) {
+                n.left = new Node(data);
+                return;
+            } else {
+                this.#searchTreeRec(n.left, data);
+            }
+        } else if (data >= n.data) { // this won't make a true BST due to >= comparison. it's arbitrarily here for cases like arrWithDupes
+            if (!n.right) {
+                n.right = new Node(data);
+                return
+            } else {
+                this.#searchTreeRec(n.right, data);
+            }
+        } else {
+            return;
+        }
     }
 };
 
@@ -334,4 +335,4 @@ console.log(treeC);
 // console.log(treeC.dfsInOrderSort());
 // console.log(treeC.dfsPreOrderSort());
 // console.log(treeC.dfsPostOrderSort());
-console.log('BFS: ', treeC.bfsShowLevels());
+console.log(treeC.bfsShowLevels());
