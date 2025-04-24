@@ -4,7 +4,9 @@ util.inspect.defaultOptions.depth = null
 
 // --- debug helpers ---
 
-const isWithinTimeLimit = (startTime, limit) => {
+const TWO_SECONDS_MS = 2000;
+
+const isWithinTimeLimit = (startTime, limit = TWO_SECONDS_MS) => {
     if (Date.now() - startTime >= limit) {
         console.log(`* * * This is taking more than ${limit / 1000} seconds! * * *`)
         return false;
@@ -52,7 +54,7 @@ class BST {
                     } else {
                         return searchTree(n.left);
                     }
-                } else if (data >= n.data) { // this won't make a true BST due to >= comparison, but it's here for edge cases
+                } else if (data >= n.data) { // this won't make a true BST due to >= comparison. it's arbitrarily here for cases like arrWithDupes
                     if (!n.right) {
                         n.right = new Node(data);
                         return
@@ -110,6 +112,10 @@ class BST {
         let current = this.root;
 
         while(current.data !== data) {
+            if (!isWithinTimeLimit(Date.now())) {
+                break;
+            }
+
             if (data < current.data) {
                 current = current.left;
             } else if (data > current.data) {
@@ -136,12 +142,43 @@ class BST {
 
     // in-order
     // sort by left, root, right
-    dfsInOrder(data = this.root) {
-        let stack = [];
+    dfsInOrderTraversedPath() {
+        let stack = [this.root];
+        let traversalOrder = []
 
+        // LIFO: set traversal order
+        while (stack.length) {
+            let current = stack.shift();
+            traversalOrder.push(current.data)
 
+            if (current.right) {
+                stack.unshift(current.right)
+            }
 
-        return stack;
+            if (current.left) {
+                stack.unshift(current.left)
+            }
+        }
+
+        return traversalOrder;
+    }
+
+    dfsInOrderSort() {
+        let result = [];
+
+        // recursive implementation
+        const traverse = (node) => {
+            if (!node) return;
+
+            traverse(node.left);
+            result.push(node.data)
+            traverse(node.right);
+
+        }
+
+        traverse(this.root);
+
+        return result;
     }
 
     // pre-order
@@ -174,9 +211,12 @@ const createBST = (arr) => {
     return tree;
 };
 
-// --- runtime test cases, uncomment & edit as needed ---
+// =================
+// Runtime Tests
+// uncomment & edit as needed
+// =================
 
-// const a = 2, b = 1, c = 5;
+const a = 2, b = 1, c = 5;
 /*
       2
      / \
@@ -189,8 +229,8 @@ const createBST = (arr) => {
 // sampTree.insert(c)
 // console.log(sampTree)
 
-// let arrWithDupes = [2, 1, 5, 1, 2, 2, 2];
-// const treeA = createBST(arrWithDupes)
+let arrWithDupes = [2, 1, 5, 1, 2, 2, 2];
+const treeA = createBST(arrWithDupes)
 // console.log(treeA)
 // console.log(treeA.min())
 
@@ -206,7 +246,7 @@ const arrWithoutDupes = [50, 17, 72, 12, 23, 54, 76, 9, 14, 19, 67];
   9    14 19      67
 
 */
-// const treeB = createBST(arrWithoutDupes)
+const treeB = createBST(arrWithoutDupes)
 // console.log(treeB)
 // console.log(treeB.min())
 // console.log(treeB.max())
@@ -223,8 +263,10 @@ const arr3 = [15, 3, 36, 28, 12, 2, 39];
    2    12 28   39
 
 expected:
-    dfsInOrder => [2, 3, 12, 15, 28, 36, 39]
+    dfsInOrderTraversedPath -> [15, 3, 2, 12, 36, 28, 39]
+    dfsInOrderSort => [2, 3, 12, 15, 28, 36, 39]
 */
 const treeC = createBST(arr3);
 console.log(treeC);
-// console.log(treeC.dfsInOrder())
+console.log(treeC.dfsInOrderTraversedPath());
+console.log(treeC.dfsInOrderSort());
