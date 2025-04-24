@@ -142,6 +142,7 @@ class BST {
 
     // in-order
     // sort by left, root, right
+    // POST-IMPLEMENTATION NOTE: tracing the path traversed this way is actually the same as dfsPreOrder
     dfsInOrderTraversedPath() {
         let stack = [this.root];
         let traversalOrder = []
@@ -166,12 +167,11 @@ class BST {
     dfsInOrderSort() {
         let result = [];
 
-        // recursive implementation
         const traverse = (node) => {
             if (!node) return;
 
             traverse(node.left);
-            result.push(node.data)
+            result.push(node.data);
             traverse(node.right);
 
         }
@@ -182,15 +182,40 @@ class BST {
     }
 
     // pre-order
-    // sort by root, left, right -- same order as input array(?)
-    dfsPreOrder() {
+    // sort by root, left, right
+    // implementing recursively as opposed to iteratively in dfsInOrderTraversedPath
+    dfsPreOrderSort() {
+        let result = [];
 
+        const traverse = (node) => {
+            if (!node) return;
+
+            result.push(node.data);
+            traverse(node.left);
+            traverse(node.right);
+        }
+
+        traverse(this.root);
+
+        return result;
     }
 
     //post-order
     // left, right, root
-    dfsPostOrder() {
+    dfsPostOrderSort() {
+        let result = [];
 
+        const traverse = (node) => {
+            if (!node) return;
+
+            traverse(node.left);
+            traverse(node.right);
+            result.push(node.data);
+        }
+
+        traverse(this.root);
+
+        return result;
     }
 
     // --- breadth-first search ---
@@ -236,14 +261,14 @@ const treeA = createBST(arrWithDupes)
 
 const arrWithoutDupes = [50, 17, 72, 12, 23, 54, 76, 9, 14, 19, 67];
 /*
-            50
-          /     \
-         /       \
+             50
+           /    \
+          /      \
         17        72  
       /    \     /   \
     12      23  54    76
-   /   \   /      \
-  9    14 19      67
+   /  \    /     \
+  9   14  19      67
 
 */
 const treeB = createBST(arrWithoutDupes)
@@ -259,14 +284,17 @@ const arr3 = [15, 3, 36, 28, 12, 2, 39];
          15
        /    \
       3      36
-    /   \   /   \
-   2    12 28   39
+    /  \    /   \
+   2   12  28   39
 
 expected:
-    dfsInOrderTraversedPath -> [15, 3, 2, 12, 36, 28, 39]
-    dfsInOrderSort => [2, 3, 12, 15, 28, 36, 39]
+    dfsInOrderTraversedPath AND dfsPreOrderSort -> [15, 3, 2, 12, 36, 28, 39]
+    dfsInOrderSort -> [2, 3, 12, 15, 28, 36, 39]
+    dfsPostOrderSort -> [2, 12, 3, 28, 39, 36, 15]
 */
 const treeC = createBST(arr3);
 console.log(treeC);
 console.log(treeC.dfsInOrderTraversedPath());
 console.log(treeC.dfsInOrderSort());
+console.log(treeC.dfsPreOrderSort());
+console.log(treeC.dfsPostOrderSort());
