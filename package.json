@@ -1,0 +1,6 @@
+{
+	"type": "module",
+	"scripts": {
+		"examples": "node ./examples.js"
+	}
+}
