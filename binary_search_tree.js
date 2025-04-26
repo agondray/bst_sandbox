@@ -1,21 +1,10 @@
+const helpers = require('./helpers/index.js');
+
+const { createBSTFromArray } = helpers;
+
 // disable recursion limit for console.logs to see object structure in output
 const util = require('util')
 util.inspect.defaultOptions.depth = null
-
-// =================
-// Helpers - debug
-// =================
-
-const TWO_SECONDS_MS = 2000;
-
-const isWithinTimeLimit = (startTime, limit = TWO_SECONDS_MS) => {
-    if (Date.now() - startTime >= limit) {
-        console.log(`* * * This is taking more than ${limit / 1000} seconds! * * *`)
-        return false;
-    }
-
-    return true
-}
 
 // =============================
 // Node & Tree Class Definitions
@@ -252,20 +241,7 @@ class BST {
     }
 };
 
-// ===================================
-// Helpers - runtime tests & examples
-// ===================================
 
-// generate tree from array of numbers
-const createBST = (arr) => {
-    const tree = new BST();
-
-    arr.forEach(e => {
-        tree.insert(e)
-    })
-
-    return tree;
-};
 
 // WIP - other ideas for practice:
 // left sum, right sum
@@ -291,7 +267,7 @@ const a = 2, b = 1, c = 5;
 // console.log(sampTree)
 
 let arrWithDupes = [2, 1, 5, 1, 2, 2, 2];
-const treeA = createBST(arrWithDupes)
+const treeA = createBSTFromArray(arrWithDupes)
 // console.log(treeA)
 // console.log(treeA.min())
 
@@ -307,7 +283,7 @@ const arrWithoutDupes = [50, 17, 72, 12, 23, 54, 76, 9, 14, 19, 67];
   9   14  19      67
 
 */
-const treeB = createBST(arrWithoutDupes)
+const treeB = createBSTFromArray(arrWithoutDupes)
 // console.log(treeB)
 // console.log(treeB.min())
 // console.log(treeB.max())
@@ -329,7 +305,7 @@ expected:
     dfsPostOrderSort -> [2, 12, 3, 28, 39, 36, 15]
     bfsShowLevels -> [5, 3, 36, 2, 12, 28, 39]
 */
-const treeC = createBST(arr3);
+const treeC = createBSTFromArray(arr3);
 console.log(treeC);
 // console.log(treeC.dfsInOrderTraversedPath());
 // console.log(treeC.dfsInOrderSort());
